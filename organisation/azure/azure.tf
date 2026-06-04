@@ -98,13 +98,13 @@ variable "authorizations" {
   }))
   default = [
     {
-      principal_id           = "603f62f6-283e-4307-9735-d4a801daf8aa" # AccuKnox App Register
+      principal_id           = "47e2ce34-c78d-4aaf-8f5f-300ec63c907f" # AccuKnox App Register
       principal_display_name = "AccuKnox CSPM Reader"
       role_definition_id     = "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader
     },
     {
       principal_id           = "cc2d4923-7605-4505-82e2-5235216d03fc" 
-      principal_display_name = "Ayush Aggarwal"
+      principal_display_name = "AccuKnox Scanner"
       role_definition_id     = "acdd72a7-3385-48ef-bd42-f606fba81ae7"
     }
   ]
