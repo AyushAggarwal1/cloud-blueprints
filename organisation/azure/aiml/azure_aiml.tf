@@ -70,13 +70,13 @@ variable "accuknox_verification_token" {
 variable "management_group_id" {
   description = "Root management group ID where the policy will be assigned"
   type        = string
-  default     = "mg-gr-1"
+  default     = ""
 }
 
 variable "context_subscription_id" {
   description = "Subscription ID where the shared lighthouse definition will be created"
   type        = string
-  default     = "f25ebac7-f91b-49e3-b9cb-aa578e0e5342"
+  default     = ""
 
   validation {
     condition     = var.context_subscription_id != null && var.context_subscription_id != ""
@@ -147,13 +147,13 @@ variable "excluded_subscription_ids" {
 variable "included_management_group_ids" {
   description = "Management groups to include (include mode only)"
   type        = list(string)
-  default     = ["mg-gr-1", "mg-gr-2"]
+  default     = []
 }
 
 variable "include_extra_subscription_ids" {
   description = "Extra subscriptions to include outside of management groups (include mode only)"
   type        = list(string)
-  default     = ["e918980b-80af-4890-b827-9ab79b3fac87"]
+  default     = []
 }
 
 
