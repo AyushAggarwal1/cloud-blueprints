@@ -1,8 +1,8 @@
-# AccuKnox Azure Onboarding
+# Azure Onboarding
 
 ## Overview
 
-This Terraform module automatically onboards Azure subscriptions to AccuKnox via Azure Lighthouse. It uses Azure Policy to automatically create Lighthouse delegations for all subscriptions under a management group, including **new subscriptions created in the future**.
+This Terraform module automatically onboards Azure subscriptions via Azure Lighthouse. It uses Azure Policy to automatically create Lighthouse delegations for all subscriptions under a management group, including **new subscriptions created in the future**.
 
 ### What This Module Does
 
@@ -142,10 +142,6 @@ Once this module is deployed, **new subscriptions are automatically onboarded** 
 - The policy's `deployIfNotExists` effect triggers automatically
 - A Lighthouse assignment is created for the subscription
 - The subscription becomes "Compliant"
-
-#### 4. Visibility in AccuKnox (Automatic)
-- Once the assignment exists, the subscription appears in AccuKnox tenant
-- AccuKnox can now access the subscription via Lighthouse delegation
 
 ### Requirements for Automatic Onboarding
 
