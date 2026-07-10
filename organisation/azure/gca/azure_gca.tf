@@ -1,4 +1,5 @@
-# Combined Terraform of main.tf, variables.tf, version.tf
+########################################################
+# Combined Terraform: main.tf, variables.tf, version.tf
 
 
 ########################################################
@@ -16,6 +17,14 @@ terraform {
     azapi = {
       source  = "azure/azapi"
       version = ">= 1.12.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">= 2.47.0"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = ">= 3.0.0"
     }
   }
 }
@@ -103,9 +112,9 @@ variable "authorizations" {
       role_definition_id     = "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader
     },
     {
-      principal_id           = "cc2d4923-7605-4505-82e2-5235216d03fc" 
+      principal_id           = "cc2d4923-7605-4505-82e2-5235216d03fc"
       principal_display_name = "AccuKnox Scanner"
-      role_definition_id     = "acdd72a7-3385-48ef-bd42-f606fba81ae7"
+      role_definition_id     = "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader
     }
   ]
 }
@@ -238,7 +247,12 @@ locals {
 data "external" "included_mg_subs" {
   for_each = toset(local.filtered_included_management_group_ids)
   program  = ["bash", "-c", <<-EOT
-    az graph query -q "ResourceContainers | where type == 'microsoft.resources/subscriptions' | extend mgChain = properties.managementGroupAncestorsChain | where mgChain has '${each.value}' | project subscriptionId" -o json | jq -c '{subscriptions: ([.data[].subscriptionId] | @json)}'
+    result=$(az graph query -q "ResourceContainers | where type == 'microsoft.resources/subscriptions' | extend mgChain = properties.managementGroupAncestorsChain | where mgChain has '${each.value}' | project subscriptionId" -o json 2>/dev/null)
+    if [ -z "$result" ]; then
+      echo '{"subscriptions":"[]"}'
+    else
+      echo "$result" | jq -c '{subscriptions: ([.data[].subscriptionId] | @json)}'
+    fi
   EOT
   ]
 }
@@ -470,7 +484,7 @@ resource "azurerm_policy_definition" "auto_lighthouse_assignment" {
 # Policy assignment for include mode
 resource "azurerm_management_group_policy_assignment" "auto_lighthouse_include" {
   count                = length(local.filtered_included_management_group_ids)
-  name                 = "${var.policy_assignment_name}-auto-${substr(local.filtered_included_management_group_ids[count.index], 0, 8)}"
+  name                 = "${var.policy_assignment_name}-auto-${substr(lower(local.filtered_included_management_group_ids[count.index]), 0, 8)}"
   display_name         = "Auto Lighthouse Assignment - ${local.filtered_included_management_group_ids[count.index]}"
   management_group_id  = "/providers/Microsoft.Management/managementGroups/${local.filtered_included_management_group_ids[count.index]}"
   policy_definition_id = azurerm_policy_definition.auto_lighthouse_assignment[local.filtered_included_management_group_ids[count.index]].id
@@ -499,20 +513,21 @@ resource "azurerm_role_assignment" "auto_policy_identity_owner_include" {
 # Automatic Remediation for Include Mode
 ########################################################
 
-# Create remediation task for each management group
-resource "azurerm_management_group_policy_remediation" "auto_lighthouse_include" {
-  count                = length(local.filtered_included_management_group_ids)
-  name                 = "remediate-lighthouse-${local.filtered_included_management_group_ids[count.index]}"
-  management_group_id  = "/providers/Microsoft.Management/managementGroups/${local.filtered_included_management_group_ids[count.index]}"
-  policy_assignment_id = azurerm_management_group_policy_assignment.auto_lighthouse_include[count.index].id
-  location_filters     = []
-  failure_percentage   = 1.0
-  parallel_deployments = 10
-  resource_count       = 500
+# null_resource + local-exec: az policy remediation create is idempotent (ARM PUT) —
+# creates if missing, updates if already exists, never errors on conflict
+resource "null_resource" "auto_lighthouse_include_remediation" {
+  for_each = toset(local.filtered_included_management_group_ids)
 
-  depends_on = [
-    azurerm_role_assignment.auto_policy_identity_owner_include
-  ]
+  triggers = {
+    policy_assignment_id = azurerm_management_group_policy_assignment.auto_lighthouse_include[index(local.filtered_included_management_group_ids, each.value)].id
+    mg_id                = each.value
+  }
+
+  provisioner "local-exec" {
+    command = "az policy remediation create --name 'remediate-lighthouse-${lower(each.value)}' --policy-assignment '${azurerm_management_group_policy_assignment.auto_lighthouse_include[index(local.filtered_included_management_group_ids, each.value)].id}' --management-group '${each.value}'"
+  }
+
+  depends_on = [azurerm_role_assignment.auto_policy_identity_owner_include]
 }
 
 # Policy assignment for exclude mode
@@ -550,18 +565,18 @@ resource "azurerm_role_assignment" "auto_policy_identity_owner_exclude" {
 # Automatic Remediation for Exclude Mode
 ########################################################
 
-resource "azurerm_management_group_policy_remediation" "auto_lighthouse_exclude" {
-  count                = var.mode == "exclude" ? 1 : 0
-  name                 = "remediate-lighthouse-exclude"
-  management_group_id  = data.azurerm_management_group.target.id
-  policy_assignment_id = azurerm_management_group_policy_assignment.auto_lighthouse_exclude[0].id
-  location_filters     = []
-  failure_percentage   = 1.0
-  parallel_deployments = 10
-  resource_count       = 500
+resource "null_resource" "auto_lighthouse_exclude_remediation" {
+  count = var.mode == "exclude" ? 1 : 0
 
-  depends_on = [
-    azurerm_role_assignment.auto_policy_identity_owner_exclude
-  ]
+  triggers = {
+    policy_assignment_id = azurerm_management_group_policy_assignment.auto_lighthouse_exclude[0].id
+    mg_id                = var.management_group_id
+  }
+
+  provisioner "local-exec" {
+    command = "az policy remediation create --name 'remediate-lighthouse-exclude' --policy-assignment '${azurerm_management_group_policy_assignment.auto_lighthouse_exclude[0].id}' --management-group '${var.management_group_id}'"
+  }
+
+  depends_on = [azurerm_role_assignment.auto_policy_identity_owner_exclude]
 }
 

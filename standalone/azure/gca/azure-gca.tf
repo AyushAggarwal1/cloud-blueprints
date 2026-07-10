@@ -1,3 +1,14 @@
+variable "app_display_name" {
+  type        = string
+  default     = "Azure-Onboarding-App"
+  description = "Display name of the Azure AD Application"
+}
+variable "subscription_id" {
+  type        = string
+  default     = ""
+  description = "Azure Subscription ID. Leave empty to use current subscription"
+}
+
 provider "azurerm" {
     features {}
     skip_provider_registration = "true"
@@ -8,7 +19,7 @@ provider "azurerm" {
   }
   
   resource "azuread_application" "accuknox" {
-    display_name = "AccuKnox"
+    display_name = var.app_display_name
   
     required_resource_access {
       resource_app_id = "00000003-0000-0000-c000-000000000000"  # Microsoft Graph

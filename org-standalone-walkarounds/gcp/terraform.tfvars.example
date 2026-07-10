@@ -1,0 +1,18 @@
+# GCP Organization and Host Project
+org_id          = "00000000000"         # Replace with your Org ID
+host_project_id = "project-1"  # Replace with the project where SA will live
+
+# List of projects to scan (Replaces project_id.txt)
+target_project_ids = [
+  "project-1",
+  "project-2",
+  "project-3"
+]
+
+# CSPM Credentials
+cspm_token = "user-token"
+
+# CSPM Metadata
+label_name = "gcpdev" #changeme
+aws_prefix = "gcpdev" #changeme
+tag_value  = "gcpadity" #changeme

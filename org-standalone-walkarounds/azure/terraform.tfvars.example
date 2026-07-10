@@ -1,0 +1,15 @@
+application_name = "ak-azure-onboard-application"
+
+subscription_ids = [
+  "eb1a1bd4-5c9c-xxxx-b655-xxxxxxxxx",
+  "69e37648-d32f-xxxx-a45e-xxxxxxxxx"
+]
+
+cspm_token = "user-token"
+
+# Label Configuration
+label_name = "azuredev"
+aws_prefix = "azuredev"
+
+# Tag Configuration
+tag_value = "azuredev"

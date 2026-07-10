@@ -1,6 +1,6 @@
 variable "app_display_name" {
   type        = string
-  default     = "Azure-AIML-Onboarding-App"
+  default     = "Azure-Onboarding-App"
   description = "Display name of the Azure AD Application"
 }
 variable "subscription_id" {
@@ -35,12 +35,14 @@ provider "azuread" {}
 
 resource "azuread_application" "accuknox" {
   display_name = var.app_display_name
+
   required_resource_access {
-    resource_app_id = "00000003-0000-0000-c000-000000000000"
-    resource_access {
-      id   = "5778995a-e1bf-45b8-affa-663a9f3f4d04"
-      type = "Scope"
-    }
+      resource_app_id = "00000003-0000-0000-c000-000000000000"  # Microsoft Graph
+  
+      resource_access {
+        id   = "5778995a-e1bf-45b8-affa-663a9f3f4d04"  # Directory.Read.All
+        type = "Scope"
+      }
   }
 }
 
@@ -49,7 +51,6 @@ resource "azuread_service_principal" "accuknox_sp" {
 }
 resource "azuread_service_principal_password" "client_secret" {
   service_principal_id = azuread_service_principal.accuknox_sp.id
-  end_date = timeadd(timestamp(), "8760h")
 }
 data "azurerm_subscription" "current" {
   subscription_id = var.subscription_id != "" ? var.subscription_id : null
@@ -71,7 +72,9 @@ resource "azurerm_role_definition" "custom_accuknox_ml_role" {
       "Microsoft.MachineLearningServices/workspaces/serverlessEndpoints/listKeys/action",
       "Microsoft.MachineLearningServices/workspaces/listStorageAccountKeys/action",
       "Microsoft.CognitiveServices/accounts/listKeys/action",
-      "Microsoft.CognitiveServices/accounts/deployments/read"
+      "Microsoft.CognitiveServices/accounts/deployments/read",
+      "Microsoft.MachineLearningServices/workspaces/datastores/listSecrets/action",
+      "Microsoft.Storage/storageAccounts/listKeys/action"
     ]
   }
   assignable_scopes = [

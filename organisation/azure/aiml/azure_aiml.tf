@@ -1,8 +1,7 @@
 ########################################################
-# Combined Terraform: main.tf, variables.tf, version.tf
-# Adds:
 #   - Cognitive Services User + OpenAI User (via Lighthouse delegation)
 #   - Microsoft Graph application permissions (via azuread, gated)
+#   - Power Platform: register AccuKnox app as Service Reader app user
 ########################################################
 
 
@@ -26,6 +25,10 @@ terraform {
       source  = "hashicorp/azuread"
       version = ">= 2.47.0"
     }
+    powerplatform = {
+      source  = "microsoft/power-platform"
+      version = ">= 3.7, < 5.0"
+    }
   }
 }
 
@@ -40,6 +43,11 @@ provider "azurerm" {
 provider "azapi" {}
 
 provider "azuread" {}
+
+# Power Platform: use_cli = true reuses your `az login` session.
+provider "powerplatform" {
+  use_cli = true
+}
 
 
 
@@ -70,13 +78,13 @@ variable "accuknox_verification_token" {
 variable "management_group_id" {
   description = "Root management group ID where the policy will be assigned"
   type        = string
-  default     = ""
+  default     = "context-management-group"
 }
 
 variable "context_subscription_id" {
   description = "Subscription ID where the shared lighthouse definition will be created"
   type        = string
-  default     = ""
+  default     = "context_subscription_id"
 
   validation {
     condition     = var.context_subscription_id != null && var.context_subscription_id != ""
@@ -147,7 +155,7 @@ variable "excluded_subscription_ids" {
 variable "included_management_group_ids" {
   description = "Management groups to include (include mode only)"
   type        = list(string)
-  default     = []
+  default     = ["tfc_test","azureorgtesting"]
 }
 
 variable "include_extra_subscription_ids" {
@@ -161,7 +169,7 @@ variable "include_extra_subscription_ids" {
 variable "excluded_management_groups" {
   description = "Management groups to exclude (exclude mode only)"
   type        = list(string)
-  default     = []
+  default     = ["exclude-management-group-id-1", "exclude-management-group-id-2"]
 }
 
 variable "include_exception_subscription_ids" {
@@ -227,6 +235,54 @@ variable "graph_app_role_ids" {
     "b0afded3-3588-46d8-8b3d-9842eff778da", # AuditLog.Read.All
     "20e6f8e4-ffac-4cf7-82f7-70ddb7564318", # AuditLogsQuery-CRM.Read.All
     "5e1e9171-754d-478c-812c-f1755a9a4c2d", # AuditLogsQuery.Read.All
+  ]
+}
+
+
+########################################################
+# Power Platform Variables
+########################################################
+
+variable "enable_powerplatform_registration" {
+  description = "Register the AccuKnox app as a Service Reader application user in Power Platform (Dataverse) environments. Set false to skip (and avoid needing Power Platform auth)."
+  type        = bool
+  default     = true
+}
+
+variable "dataverse_security_role_name" {
+  description = "Dataverse security role assigned to the AccuKnox application user."
+  type        = string
+  default     = "Service Reader"
+}
+
+variable "only_environment_display_names" {
+  description = "Restrict Power Platform registration to these environment display names. Empty = ALL Dataverse environments."
+  type        = list(string)
+  default     = []
+}
+
+
+########################################################
+# Custom ML Scanner Role Variables
+########################################################
+
+variable "ml_scanner_role_name" {
+  description = "Name of the custom role granting AccuKnox the ML secret/key-listing actions needed for dataset scanning. Must be unique within the customer tenant."
+  type        = string
+  default     = "AccuKnox ML Scanner"
+}
+
+variable "ml_scanner_custom_role_actions" {
+  description = "Control-plane actions for the custom ML scanner role. These are management-plane '*/action' / '*/read' permissions (they go in 'actions', not 'data_actions') and are assigned directly per subscription — NOT via Lighthouse, which rejects custom roles."
+  type        = list(string)
+  default = [
+    "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/score/action",
+    "Microsoft.MachineLearningServices/workspaces/serverlessEndpoints/listKeys/action",
+    "Microsoft.MachineLearningServices/workspaces/listStorageAccountKeys/action",
+    "Microsoft.MachineLearningServices/workspaces/datastores/listSecrets/action",
+    "Microsoft.CognitiveServices/accounts/listKeys/action",
+    "Microsoft.CognitiveServices/accounts/deployments/read",
+    "Microsoft.Storage/storageAccounts/listKeys/action",
   ]
 }
 
@@ -457,6 +513,7 @@ locals {
   cognitive_role_ids = [
     "a97b65f3-24c7-4388-baec-2e87135dc908", # Cognitive Services User
     "5e0bd9bd-7b93-4f28-af87-19fc36ad61bd", # Cognitive Services OpenAI User
+    "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1", # Storage Blob Data Reader
   ]
 
   all_target_subscription_ids = var.mode == "include" ? distinct(concat(
@@ -482,19 +539,170 @@ resource "azurerm_role_assignment" "accuknox_cognitive_services" {
 }
 
 ########################################################
+# Custom ML Scanner Role + Direct Assignment
+########################################################
+
+# Custom role defined at the target MG so it is assignable on all child subscriptions.
+resource "azurerm_role_definition" "accuknox_ml_scanner" {
+  name        = var.ml_scanner_role_name
+  scope       = data.azurerm_management_group.target.id
+  description = "AccuKnox CSPM: retrieve ML datastore/storage secrets and endpoint keys for dataset scanning"
+
+  permissions {
+    actions = var.ml_scanner_custom_role_actions
+    # All four are management-plane actions; no data_actions / not_actions required.
+    not_actions = []
+  }
+
+  assignable_scopes = distinct(concat(
+
+    [data.azurerm_management_group.target.id],
+
+    [for sub in local.all_target_subscription_ids : "/subscriptions/${sub}"]
+
+  ))
+}
+
+# Direct per-subscription assignment of the custom role (gated like the cognitive block,
+# since it depends on the AccuKnox SP looked up only when enable_graph_permissions is true).
+resource "azurerm_role_assignment" "accuknox_ml_scanner" {
+  for_each           = var.enable_graph_permissions ? toset(local.all_target_subscription_ids) : []
+  scope              = "/subscriptions/${each.value}"
+  role_definition_id = azurerm_role_definition.accuknox_ml_scanner.role_definition_resource_id
+  principal_id       = data.azuread_service_principal.accuknox[0].object_id
+  principal_type     = "ServicePrincipal"
+
+  # Ensure the role definition has propagated before assigning it.
+  depends_on = [azurerm_role_definition.accuknox_ml_scanner]
+}
+
+
+########################################################
+# Power Platform — register AccuKnox app as a Service Reader
+########################################################
+
+data "powerplatform_environments" "all" {
+  count = var.enable_powerplatform_registration ? 1 : 0
+}
+
+locals {
+  dataverse_envs = var.enable_powerplatform_registration ? {
+    for env in data.powerplatform_environments.all[0].environments :
+    env.display_name => env
+    if env.dataverse != null && (
+      length(var.only_environment_display_names) == 0 ||
+      contains(var.only_environment_display_names, env.display_name)
+    )
+  } : {}
+}
+
+
+data "powerplatform_data_records" "root_business_unit" {
+  for_each          = local.dataverse_envs
+  environment_id    = each.value.id
+  entity_collection = "businessunits"
+  filter            = "parentbusinessunitid eq null"
+  select            = ["name"]
+}
+
+# Security roles per environment (to resolve the role name -> role_id).
+data "powerplatform_security_roles" "roles" {
+  for_each         = local.dataverse_envs
+  environment_id   = each.value.id
+  business_unit_id = data.powerplatform_data_records.root_business_unit[each.key].rows[0].businessunitid
+}
+
+locals {
+  role_id_by_env = {
+    for name, _ in local.dataverse_envs :
+    name => one([
+      for role in data.powerplatform_security_roles.roles[name].security_roles :
+      role.role_id if role.name == var.dataverse_security_role_name
+    ])
+  }
+}
+
+# Application user (systemuser keyed by the AccuKnox app CLIENT ID) with the
+# Service Reader role only, in each environment.
+resource "powerplatform_data_record" "app_user" {
+  for_each = local.dataverse_envs
+
+  environment_id     = each.value.id
+  table_logical_name = "systemuser"
+
+  columns = {
+    applicationid = var.accuknox_app_client_id
+
+    businessunitid = {
+      table_logical_name = "businessunit"
+      data_record_id     = data.powerplatform_data_records.root_business_unit[each.key].rows[0].businessunitid
+    }
+
+    systemuserroles_association = toset([
+      {
+        table_logical_name = "role"
+        data_record_id     = local.role_id_by_env[each.key]
+      }
+    ])
+  }
+
+  lifecycle {
+    precondition {
+      condition     = local.role_id_by_env[each.key] != null
+      error_message = "Security role '${var.dataverse_security_role_name}' not found in environment '${each.key}'."
+    }
+  }
+}
+
+# Disable each application user BEFORE Terraform deletes it. 
+resource "terraform_data" "disable_app_user_on_destroy" {
+  for_each = local.dataverse_envs
+
+  input = {
+    url          = trimsuffix(each.value.dataverse.url, "/")
+    systemuserid = powerplatform_data_record.app_user[each.key].id
+  }
+
+  depends_on = [powerplatform_data_record.app_user]
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<-EOT
+      set -uo pipefail
+      base="${self.input.url}/api/data/v9.2/systemusers(${self.input.systemuserid})"
+      # 1) Disable the application user (Dataverse refuses to delete enabled users).
+      az rest --method patch \
+        --url "$base" \
+        --resource "${self.input.url}" \
+        --headers "Content-Type=application/json" \
+        --body '{"isdisabled": true}' \
+        --only-show-errors || true
+      sleep 5
+      # 2) Delete the systemuser so the application user is removed from the env.
+      az rest --method delete \
+        --url "$base" \
+        --resource "${self.input.url}" \
+        --only-show-errors || true
+    EOT
+  }
+}
+
+
+
+########################################################
 # Policy for Automatic Assignment to New Subscriptions
 ########################################################
 
 # Simple policy that creates lighthouse assignments for new subscriptions
 # Create policy definition at each included management group to ensure scope compatibility
 resource "azurerm_policy_definition" "auto_lighthouse_assignment" {
-  for_each            = var.mode == "include" ? toset(local.filtered_included_management_group_ids) : toset([var.management_group_id])
-  name                = var.policy_definition_name
+  for_each           = var.mode == "include" ? toset(local.filtered_included_management_group_ids) : toset([var.management_group_id])
+  name               = var.policy_definition_name
   management_group_id = "/providers/Microsoft.Management/managementGroups/${each.value}"
-  policy_type         = "Custom"
-  mode                = "All"
-  display_name        = "Auto-assign AccuKnox Lighthouse to new subscriptions"
-  description         = "Automatically creates lighthouse assignments for new subscriptions using the shared definition"
+  policy_type        = "Custom"
+  mode               = "All"
+  display_name       = "Auto-assign AccuKnox Lighthouse to new subscriptions"
+  description        = "Automatically creates lighthouse assignments for new subscriptions using the shared definition"
 
   parameters = jsonencode({
     lighthouseDefinitionId = {
@@ -505,7 +713,7 @@ resource "azurerm_policy_definition" "auto_lighthouse_assignment" {
 
   policy_rule = jsonencode({
     if = {
-      field  = "type"
+      field = "type"
       equals = "Microsoft.Resources/subscriptions"
     }
     then = {
@@ -519,11 +727,11 @@ resource "azurerm_policy_definition" "auto_lighthouse_assignment" {
         existenceCondition = {
           allOf = [
             {
-              field  = "type"
+              field = "type"
               equals = "Microsoft.ManagedServices/registrationAssignments"
             },
             {
-              field  = "Microsoft.ManagedServices/registrationAssignments/registrationDefinitionId"
+              field = "Microsoft.ManagedServices/registrationAssignments/registrationDefinitionId"
               equals = "[parameters('lighthouseDefinitionId')]"
             }
           ]
@@ -603,7 +811,7 @@ resource "azurerm_role_assignment" "auto_policy_identity_owner_include" {
 # Create remediation task for each management group
 resource "azurerm_management_group_policy_remediation" "auto_lighthouse_include" {
   count                = length(local.filtered_included_management_group_ids)
-  name                 = "remediate-lighthouse-${local.filtered_included_management_group_ids[count.index]}"
+  name                 =  lower("remediate-lighthouse-${replace(local.filtered_included_management_group_ids[count.index], "/[^a-zA-Z0-9-]/", "-")}")
   management_group_id  = "/providers/Microsoft.Management/managementGroups/${local.filtered_included_management_group_ids[count.index]}"
   policy_assignment_id = azurerm_management_group_policy_assignment.auto_lighthouse_include[count.index].id
   location_filters     = []
@@ -666,3 +874,25 @@ resource "azurerm_management_group_policy_remediation" "auto_lighthouse_exclude"
   ]
 }
 
+
+
+########################################################
+# Power Platform Outputs
+########################################################
+
+output "powerplatform_registered_environments" {
+  description = "Dataverse environments where the AccuKnox app user was successfully created (name => environment id)."
+  value = {
+    for name, env in local.dataverse_envs :
+    name => env.id
+    if can(powerplatform_data_record.app_user[name].id)
+  }
+}
+
+output "powerplatform_failed_environments" {
+  description = "Eligible Dataverse environments whose app-user registration did NOT succeed."
+  value = [
+    for name, _ in local.dataverse_envs :
+    name if !can(powerplatform_data_record.app_user[name].id)
+  ]
+}

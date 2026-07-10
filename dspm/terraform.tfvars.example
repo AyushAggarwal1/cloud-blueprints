@@ -1,0 +1,15 @@
+region = "us-east-1"
+
+# --- VPC-A (EC2) ---
+vpc_a_id              = "vpc-aaaaaaaa"
+vpc_a_cidr            = "10.0.0.0/16"
+ec2_route_table_ids   = ["rtb-aaaa1111"]        # EC2 subnet's route table(s)
+ec2_security_group_id = "sg-ec2xxxxxxxx"
+
+# --- VPC-B (RDS) ---
+vpc_b_id              = "vpc-bbbbbbbb"
+vpc_b_cidr            = "10.1.0.0/16"            # must NOT overlap 10.0.0.0/16
+rds_route_table_ids   = ["rtb-bbbb2222"]        # RDS subnet's route table(s)
+rds_security_group_id = "sg-rdsxxxxxxxx"
+
+db_port = 5432                                   # 3306 MySQL, 1433 SQLServer, 1521 Oracle

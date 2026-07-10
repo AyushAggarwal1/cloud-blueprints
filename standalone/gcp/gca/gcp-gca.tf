@@ -1,7 +1,17 @@
 variable "project_id" {
   description = "GCP Project ID"
   type        = string
-  default     = "shaped-infusion-402417"
+  default     = "GCP Project ID"
+}
+variable "service_account_id" {
+  description = "Service Account ID"
+  type        = string
+  default     = "gcp-onboarding-sa"
+}
+variable "service_account_display_name" {
+  description = "Display Name for the Service Account"
+  type        = string
+  default     = "GCP-Onboarding-SA"
 }
 
 provider "google" {
@@ -19,11 +29,11 @@ resource "google_project_iam_custom_role" "custom_role" {
 
 # Step 2: Create Service Account
 resource "google_service_account" "service_account" {
-  account_id   = "my-service-account"
-  display_name = "My Service Account"
+  account_id   = var.service_account_id
+  display_name = var.service_account_display_name
 }
 
-# Step 3: Assign roles to the service account
+# Step 3: Assign Viewer role to the service account
 resource "google_project_iam_member" "viewer_role" {
   project = var.project_id
   role    = "roles/viewer"
@@ -42,6 +52,7 @@ resource "google_service_account_key" "sa_key" {
   service_account_id = google_service_account.service_account.name
 }
 
+# Step 6: Save Key to Secret Manager
 resource "google_secret_manager_secret" "sa_key_secret" {
   secret_id = "accuknox-sa-key"
   replication {
