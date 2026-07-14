@@ -1,0 +1,103 @@
+# ======================================================
+# AWS Configuration
+# ======================================================
+
+# AWS profile to use for authentication
+# Should match a profile in your ~/.aws/credentials file
+aws_profile = "your-aws-profile-name"
+
+# AWS region where the CloudFormation stack will be deployed
+# This is typically the region where your AWS Organization management account is located
+management_account_region = "us-east-1"
+
+# ======================================================
+# AWS Organization Configuration
+# ======================================================
+
+# Root Organizational Unit ID for your AWS Organization
+# Get this from AWS Organizations console or CLI: aws organizations list-roots
+root_organizational_unit_id = "r-xxxxx"
+
+# List of specific Organizational Unit IDs where the StackSet should deploy
+# Get these IDs from AWS Organizations console or CLI: aws organizations list-organizational-units-for-parent --parent-id r-xxxxx
+# Leave empty to deploy to all accounts in the root OU (uses root_organizational_unit_id)
+organizational_unit_ids = []
+
+# AWS regions where the StackSet instances will be created (comma-separated in a single string)
+# These are the regions where the security auditor roles will be deployed across member accounts
+deployment_regions = ["us-east-1", "us-west-2", "eu-west-1"]
+
+# Whether to automatically deploy the StackSet to new accounts that join the organization
+auto_deploy = true
+
+# ======================================================
+# Account Filtering Configuration
+# ======================================================
+
+# Account filter type: "NONE", "INCLUDE", or "EXCLUDE"
+# - NONE: Deploy to all accounts in the specified OUs
+# - INCLUDE: Deploy only to the accounts specified in target_account_ids
+# - EXCLUDE: Deploy to all accounts in the specified OUs except those in target_account_ids
+account_filter_type = "NONE"
+
+# List of AWS account IDs to include or exclude (based on account_filter_type)
+# Example: ["123456789012", "987654321098"]
+target_account_ids = []
+
+# ======================================================
+# AccuKnox API Configuration
+# ======================================================
+
+# AccuKnox API authentication token (Bearer token)
+# Get this from your AccuKnox dashboard -> Settings -> API Tokens
+# IMPORTANT: Keep this secure and never commit it to version control
+accuknox_api_token = "your-accuknox-api-token-here"
+
+# AccuKnox environment API base URL
+# - Production: "https://cspm.accuknox.com"
+# - Staging: "https://cspm.stage.accuknox.com"
+# - Development: "https://cspm.dev.accuknox.com"
+accuknox_api_base_url = "https://cspm.stage.accuknox.com"
+
+
+# ======================================================
+# AccuKnox Organization Configuration
+# ======================================================
+
+# AccuKnox label UUID for the organization onboarding request
+# Get this from your Settings -> Labels
+accuknox_label = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# AccuKnox tag UUID for categorizing the onboarded accounts
+# Get this from your Settings -> Tags
+accuknox_tag = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# ======================================================
+# Advanced Configuration (Optional)
+# ======================================================
+
+# External ID for enhanced security when AccuKnox assumes the AWS role
+# Leave empty to auto-generate a UUID (recommended)
+# external_id = ""
+
+# API path for the AccuKnox onboarding endpoint (usually no need to change)
+# accuknox_api_path = "/api/v1/organizations"
+
+# Asset type for scanning GCA (General Cloud Assets) or AIML
+# accuknox_scan_asset_type = "GCA"
+
+# Account selection type for onboarding (usually no need to change)
+# accuknox_account_selection_type = "ALL"
+
+# Whether to automatically connect new accounts that join the organization after onboarding
+# accuknox_auto_connect_new_accounts = true
+
+# Onboarding method (usually no need to change)
+# accuknox_onboarding_method = "ROLE_ARN"
+
+# Explicit list of OU IDs to pass to AccuKnox API (leave empty to use organizational_unit_ids)
+# accuknox_explicit_ou_list = []
+
+# CloudFormation template URL for the security auditor stack deployment
+# Default points to the development template - update for production use
+# cloudformation_template_url = "https://cloud-security-cnapp.s3.amazonaws.com/aws-org-cf-dev-6cad.yaml"
