@@ -64,6 +64,426 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/ReadOnlyAccess"
         - "arn:aws:iam::aws:policy/SecurityAudit"
+      Policies:
+        - PolicyName: "scan-permission-1"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: "scanPolicy1"
+                Effect: Allow
+                Action:
+                  - "access-analyzer:GetAnalyzer"
+                  - "access-analyzer:GetFinding"
+                  - "access-analyzer:ListAnalyzers"
+                  - "access-analyzer:ListFindings"
+                  - "acm-pca:DescribeCertificateAuthority"
+                  - "acm-pca:ListCertificateAuthorities"
+                  - "acm-pca:ListTags"
+                  - "acm:DescribeCertificate"
+                  - "acm:GetCertificate"
+                  - "acm:ListCertificates"
+                  - "acm:ListTagsForCertificate"
+                  - "airflow:GetEnvironment"
+                  - "airflow:ListEnvironments"
+                  - "amplify:GetApp"
+                  - "amplify:ListApps"
+                  - "aoss:GetSecurityPolicy"
+                  - "aoss:ListCollections"
+                  - "aoss:ListSecurityPolicies"
+                  - "apigateway:GET"
+                  - "appconfig:ListApplications"
+                  - "appconfig:ListConfigurationProfiles"
+                  - "appflow:ListFlows"
+                  - "appmesh:DescribeMesh"
+                  - "appmesh:DescribeVirtualGateway"
+                  - "appmesh:ListMeshes"
+                  - "appmesh:ListVirtualGateways"
+                  - "apprunner:ListServices"
+                  - "athena:GetWorkGroup"
+                  - "athena:ListWorkGroups"
+                  - "auditmanager:GetAssessment"
+                  - "auditmanager:GetAssessmentFramework"
+                  - "auditmanager:GetEvidence"
+                  - "auditmanager:GetEvidenceByEvidenceFolder"
+                  - "auditmanager:GetEvidenceFolder"
+                  - "auditmanager:GetEvidenceFoldersByAssessment"
+                  - "auditmanager:GetSettings"
+                  - "auditmanager:ListAssessmentFrameworks"
+                  - "auditmanager:ListAssessments"
+                  - "autoscaling:DescribeAutoScalingGroups"
+                  - "autoscaling:DescribeLaunchConfigurations"
+                  - "autoscaling:DescribeNotificationConfigurations"
+                  - "backup:DescribeBackupJob"
+                  - "backup:DescribeBackupVault"
+                  - "backup:DescribeRecoveryPoint"
+                  - "backup:DescribeRegionSettings"
+                  - "backup:GetBackupPlan"
+                  - "backup:GetBackupSelection"
+                  - "backup:GetBackupVaultAccessPolicy"
+                  - "backup:GetBackupVaultNotifications"
+                  - "backup:ListBackupJobs"
+                  - "backup:ListBackupPlans"
+                  - "backup:ListBackupSelections"
+                  - "backup:ListBackupVaults"
+                  - "backup:ListRecoveryPointsByBackupVault"
+                  - "backup:ListTags"
+                  - "bedrock:GetCustomModel"
+                  - "bedrock:GetModelCustomizationJob"
+                  - "bedrock:GetModelInvocationLoggingConfiguration"
+                  - "bedrock:ListCustomModels"
+                  - "bedrock:ListModelCustomizationJobs"
+                  - "cloudformation:DescribeStackEvents"
+                  - "cloudformation:DescribeStackResource"
+                  - "cloudformation:DescribeStackResources"
+                  - "cloudformation:DescribeStackSet"
+                  - "cloudformation:DescribeStacks"
+                  - "cloudformation:GetTemplate"
+                  - "cloudformation:ListStackResources"
+                  - "cloudformation:ListStackSets"
+                  - "cloudformation:ListStacks"
+                  - "cloudfront:DescribeFunction"
+                  - "cloudfront:GetCachePolicy"
+                  - "cloudfront:GetDistribution"
+                  - "cloudfront:GetDistributionConfig"
+                  - "cloudfront:GetFunction"
+                  - "cloudfront:ListCachePolicies"
+                  - "cloudfront:ListDistributions"
+                  - "cloudfront:ListFunctions"
+                  - "cloudfront:ListTagsForResource"
+                  - "cloudtrail:DescribeTrails"
+                  - "cloudtrail:GetChannel"
+                  - "cloudtrail:GetEventSelectors"
+                  - "cloudtrail:GetInsightSelectors"
+                  - "cloudtrail:GetTrailStatus"
+                  - "cloudtrail:ListChannels"
+                  - "cloudtrail:ListTags"
+                  - "cloudwatch:DescribeAlarms"
+                  - "cloudwatch:GetMetricStatistics"
+                  - "cloudwatch:ListTagsForResource"
+                  - "codeartifact:DescribeDomain"
+                  - "codeartifact:DescribeRepository"
+                  - "codeartifact:GetDomainPermissionsPolicy"
+                  - "codeartifact:GetRepositoryEndpoint"
+                  - "codeartifact:GetRepositoryPermissionsPolicy"
+                  - "codeartifact:ListDomains"
+                  - "codeartifact:ListRepositories"
+                  - "codeartifact:ListTagsForResource"
+                  - "codebuild:BatchGetProjects"
+                  - "codebuild:ListProjects"
+                  - "codedeploy:GetDeploymentConfig"
+                  - "codedeploy:ListDeploymentConfigs"
+                  - "codepipeline:GetPipeline"
+                  - "codepipeline:ListPipelines"
+                  - "codepipeline:ListTagsForResource"
+                  - "cognito-identity:DescribeIdentityPool"
+                  - "cognito-identity:ListIdentityPools"
+                  - "cognito-idp:DescribeUserPool"
+                  - "cognito-idp:ListUserPools"
+                  - "comprehend:ListFlywheels"
+                  - "comprehend:ListSentimentDetectionJobs"
+                  - "compute-optimizer:GetRecommendationSummaries"
+                  - "config:DescribeConfigRules"
+                  - "config:DescribeConfigurationRecorderStatus"
+                  - "config:DescribeConfigurationRecorders"
+                  - "config:DescribeDeliveryChannels"
+                  - "config:GetComplianceDetailsByConfigRule"
+                  - "config:GetDiscoveredResourceCounts"
+                  - "connect:DescribeInstanceStorageConfig"
+                  - "connect:ListInstanceStorageConfigs"
+                  - "connect:ListInstances"
+                  - "databrew:ListJobs"
+                  - "dax:DescribeClusters"
+                  - "dax:DescribeSubnetGroups"
+                  - "dax:ListTags"
+                  - "devops-guru:ListNotificationChannels"
+                  - "dlm:GetLifecyclePolicies"
+                  - "dlm:GetLifecyclePolicy"
+                  - "dms:DescribeReplicationInstances"
+                  - "docdb-elastic:GetCluster"
+                  - "docdb-elastic:ListClusters"
+                  - "docdb-elastic:ListTagsForResource"
+                  - "dynamodb:DescribeBackup"
+                  - "dynamodb:DescribeContinuousBackups"
+                  - "dynamodb:DescribeKinesisStreamingDestination"
+                  - "dynamodb:DescribeTable"
+                  - "dynamodb:ListBackups"
+                  - "dynamodb:ListTables"
+                  - "dynamodb:ListTagsOfResource"
+                  - "ec2:DescribeAccountAttributes"
+                  - "ec2:DescribeAddresses"
+                  - "ec2:DescribeEgressOnlyInternetGateways"
+                  - "ec2:DescribeFlowLogs"
+                  - "ec2:DescribeImages"
+                  - "ec2:DescribeInstanceAttribute"
+                  - "ec2:DescribeInstanceCreditSpecifications"
+                  - "ec2:DescribeInstanceStatus"
+                  - "ec2:DescribeInstanceTypeOfferings"
+                  - "ec2:DescribeInstances"
+                  - "ec2:DescribeInternetGateways"
+                  - "ec2:DescribeKeyPairs"
+                  - "ec2:DescribeLaunchTemplateVersions"
+                  - "ec2:DescribeLaunchTemplates"
+                  - "ec2:DescribeManagedPrefixLists"
+                  - "ec2:DescribeNatGateways"
+                  - "ec2:DescribeNetworkAcls"
+                  - "ec2:DescribeNetworkInterfaces"
+                  - "ec2:DescribeRegions"
+                  - "ec2:DescribeReservedInstances"
+                  - "ec2:DescribeReservedInstancesModifications"
+                  - "ec2:DescribeRouteTables"
+                  - "ec2:DescribeSecurityGroupRules"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DescribeSnapshotAttribute"
+                  - "ec2:DescribeSnapshots"
+                  - "ec2:DescribeSubnets"
+                  - "ec2:DescribeVolumeAttribute"
+                  - "ec2:DescribeVolumes"
+                  - "ec2:DescribeVpcEndpointServicePermissions"
+                  - "ec2:DescribeVpcEndpointServices"
+                  - "ec2:DescribeVpcEndpoints"
+                  - "ec2:DescribeVpcPeeringConnections"
+                  - "ec2:DescribeVpcs"
+                  - "ec2:DescribeVpnConnections"
+                  - "ec2:DescribeVpnGateways"
+                  - "ec2:GetEbsDefaultKmsKeyId"
+                  - "ec2:GetEbsEncryptionByDefault"
+                  - "ec2:GetLaunchTemplateData"
+                  - "ecr:DescribeRepositories"
+                  - "ecr:GetRepositoryPolicy"
+                  - "ecs:DescribeClusters"
+                  - "ecs:DescribeServices"
+                  - "ecs:ListClusters"
+                  - "ecs:ListServices"
+                  - "ecs:ListTagsForResource"
+                  - "eks:DescribeCluster"
+                  - "eks:ListClusters"
+                  - "elasticache:DescribeCacheClusters"
+                  - "elasticache:DescribeCacheSubnetGroups"
+                  - "elasticache:DescribeReplicationGroups"
+                  - "elasticache:DescribeReservedCacheNodes"
+                  - "elasticache:ListTagsForResource"
+                  - "elasticfilesystem:DescribeFileSystems"
+                  - "elasticloadbalancing:DescribeInstanceHealth"
+                  - "elasticloadbalancing:DescribeListeners"
+                  - "elasticloadbalancing:DescribeLoadBalancerAttributes"
+                  - "elasticloadbalancing:DescribeLoadBalancerPolicies"
+                  - "elasticloadbalancing:DescribeLoadBalancers"
+                  - "elasticloadbalancing:DescribeTags"
+                  - "elasticloadbalancing:DescribeTargetGroupAttributes"
+                  - "elasticloadbalancing:DescribeTargetGroups"
+                  - "elasticloadbalancing:DescribeTargetHealth"
+                  - "elasticmapreduce:DescribeCluster"
+                  - "elasticmapreduce:DescribeSecurityConfiguration"
+                  - "elasticmapreduce:ListClusters"
+                  - "elasticmapreduce:ListInstanceGroups"
+                  - "es:ListDomainNames"
+                  - "events:ListEventBuses"
+                  - "events:ListRules"
+                  - "finspace:ListEnvironments"
+                  - "firehose:DescribeDeliveryStream"
+                  - "firehose:ListDeliveryStreams"
+                  - "forecast:ListDatasets"
+                  - "forecast:ListForecastExportJobs"
+                  - "frauddetector:GetDetectors"
+                  - "fsx:DescribeFileSystems"
+                  - "glacier:ListVaults"
+                  - "glue:GetDataCatalogEncryptionSettings"
+                  - "glue:GetSecurityConfigurations"
+                  - "guardduty:DescribePublishingDestination"
+                  - "guardduty:GetDetector"
+                  - "guardduty:GetFindings"
+                  - "guardduty:GetMasterAccount"
+                Resource: "*"
+        - PolicyName: "scan-permission-2"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: "scanPolicy2"
+                Effect: Allow
+                Action:
+                  - "guardduty:ListDetectors"
+                  - "guardduty:ListFindings"
+                  - "guardduty:ListPublishingDestinations"
+                  - "healthlake:ListFHIRDatastores"
+                  - "iam:GenerateCredentialReport"
+                  - "iam:GetAccountPasswordPolicy"
+                  - "iam:GetAccountSummary"
+                  - "iam:GetCredentialReport"
+                  - "iam:GetGroup"
+                  - "iam:GetGroupPolicy"
+                  - "iam:GetLoginProfile"
+                  - "iam:GetPolicy"
+                  - "iam:GetPolicyVersion"
+                  - "iam:GetRole"
+                  - "iam:GetRolePolicy"
+                  - "iam:GetUser"
+                  - "iam:GetUserPolicy"
+                  - "iam:ListAccountAliases"
+                  - "iam:ListAttachedGroupPolicies"
+                  - "iam:ListAttachedRolePolicies"
+                  - "iam:ListAttachedUserPolicies"
+                  - "iam:ListEntitiesForPolicy"
+                  - "iam:ListGroupPolicies"
+                  - "iam:ListGroups"
+                  - "iam:ListGroupsForUser"
+                  - "iam:ListInstanceProfilesForRole"
+                  - "iam:ListMFADevices"
+                  - "iam:ListPolicies"
+                  - "iam:ListRolePolicies"
+                  - "iam:ListRoles"
+                  - "iam:ListSSHPublicKeys"
+                  - "iam:ListServerCertificates"
+                  - "iam:ListUserPolicies"
+                  - "iam:ListUsers"
+                  - "iam:ListVirtualMFADevices"
+                  - "imagebuilder:ListComponents"
+                  - "imagebuilder:ListContainerRecipes"
+                  - "imagebuilder:ListImagePipelines"
+                  - "imagebuilder:ListImageRecipes"
+                  - "imagebuilder:ListInfrastructureConfigurations"
+                  - "iotsitewise:DescribeDefaultEncryptionConfiguration"
+                  - "kafka:ListClusters"
+                  - "kendra:ListIndices"
+                  - "kinesis:DescribeStream"
+                  - "kinesis:ListStreams"
+                  - "kinesisvideo:ListStreams"
+                  - "kms:DescribeKey"
+                  - "kms:GetKeyPolicy"
+                  - "kms:GetKeyRotationStatus"
+                  - "kms:ListAliases"
+                  - "kms:ListGrants"
+                  - "kms:ListKeys"
+                  - "kms:ListResourceTags"
+                  - "lambda:GetFunction"
+                  - "lambda:GetFunctionCodeSigningConfig"
+                  - "lambda:GetFunctionConfiguration"
+                  - "lambda:GetFunctionUrlConfig"
+                  - "lambda:GetPolicy"
+                  - "lambda:ListFunctions"
+                  - "lex:ListBots"
+                  - "logs:DescribeLogGroups"
+                  - "logs:DescribeMetricFilters"
+                  - "logs:GetDataProtectionPolicy"
+                  - "logs:ListTagsForResource"
+                  - "lookoutequipment:ListDatasets"
+                  - "managedblockchain:GetMember"
+                  - "managedblockchain:ListMembers"
+                  - "managedblockchain:ListNetworks"
+                  - "memorydb:DescribeClusters"
+                  - "mq:DescribeBroker"
+                  - "mq:ListBrokers"
+                  - "organizations:DescribeOrganization"
+                  - "organizations:ListAccounts"
+                  - "organizations:ListHandshakesForAccount"
+                  - "profile:ListDomains"
+                  - "proton:ListEnvironmentTemplates"
+                  - "rds:DescribeCertificates"
+                  - "rds:DescribeDBClusterSnapshotAttributes"
+                  - "rds:DescribeDBClusterSnapshots"
+                  - "rds:DescribeDBClusters"
+                  - "rds:DescribeDBEngineVersions"
+                  - "rds:DescribeDBInstances"
+                  - "rds:DescribeDBParameterGroups"
+                  - "rds:DescribeDBParameters"
+                  - "rds:DescribeDBProxies"
+                  - "rds:DescribeDBSnapshotAttributes"
+                  - "rds:DescribeDBSnapshots"
+                  - "rds:DescribeDBSubnetGroups"
+                  - "rds:DescribeOrderableDBInstanceOptions"
+                  - "rds:DescribePendingMaintenanceActions"
+                  - "rds:ListTagsForResource"
+                  - "redshift-serverless:GetNamespace"
+                  - "redshift-serverless:GetWorkgroup"
+                  - "redshift-serverless:ListNamespaces"
+                  - "redshift-serverless:ListTagsForResource"
+                  - "redshift-serverless:ListWorkgroups"
+                  - "redshift:DescribeClusterParameterGroups"
+                  - "redshift:DescribeClusterParameters"
+                  - "redshift:DescribeClusterSubnetGroups"
+                  - "redshift:DescribeClusters"
+                  - "redshift:DescribeLoggingStatus"
+                  - "redshift:DescribeReservedNodes"
+                  - "redshift:DescribeScheduledActions"
+                  - "route53:GetDNSSEC"
+                  - "route53:GetHostedZone"
+                  - "route53:ListHostedZones"
+                  - "route53:ListQueryLoggingConfigs"
+                  - "route53:ListResourceRecordSets"
+                  - "route53:ListTagsForResource"
+                  - "route53domains:GetDomainDetail"
+                  - "route53domains:ListDomains"
+                  - "route53domains:ListTagsForDomain"
+                  - "s3:GetAccelerateConfiguration"
+                  - "s3:GetAccessPoint"
+                  - "s3:GetAccessPointPolicy"
+                  - "s3:GetAccessPointPolicyStatus"
+                  - "s3:GetBucketAcl"
+                  - "s3:GetBucketLocation"
+                  - "s3:GetBucketLogging"
+                  - "s3:GetBucketNotification"
+                  - "s3:GetBucketObjectLockConfiguration"
+                  - "s3:GetBucketOwnershipControls"
+                  - "s3:GetBucketPolicy"
+                  - "s3:GetBucketPolicyStatus"
+                  - "s3:GetBucketPublicAccessBlock"
+                  - "s3:GetBucketTagging"
+                  - "s3:GetBucketVersioning"
+                  - "s3:GetBucketWebsite"
+                  - "s3:GetEncryptionConfiguration"
+                  - "s3:GetLifecycleConfiguration"
+                  - "s3:GetReplicationConfiguration"
+                  - "s3:ListAccessPoints"
+                  - "s3:ListAllMyBuckets"
+                  - "s3:ListBucket"
+                  - "sagemaker:DescribeDomain"
+                  - "sagemaker:DescribeNotebookInstance"
+                  - "sagemaker:ListDomains"
+                  - "sagemaker:ListNotebookInstances"
+                  - "sagemaker:ListTags"
+                  - "secretsmanager:DescribeSecret"
+                  - "secretsmanager:ListSecrets"
+                  - "securityhub:DescribeHub"
+                  - "securityhub:GetFindings"
+                  - "servicequotas:ListServiceQuotas"
+                  - "ses:DescribeActiveReceiptRuleSet"
+                  - "ses:GetIdentityDkimAttributes"
+                  - "ses:ListIdentities"
+                  - "shield:DescribeEmergencyContactSettings"
+                  - "shield:DescribeSubscription"
+                  - "shield:ListProtections"
+                  - "sns:GetSubscriptionAttributes"
+                  - "sns:GetTopicAttributes"
+                  - "sns:ListSubscriptions"
+                  - "sns:ListTagsForResource"
+                  - "sns:ListTopics"
+                  - "sqs:GetQueueAttributes"
+                  - "sqs:ListQueueTags"
+                  - "sqs:ListQueues"
+                  - "ssm:DescribeInstanceInformation"
+                  - "ssm:DescribeParameters"
+                  - "ssm:DescribeSessions"
+                  - "ssm:GetServiceSetting"
+                  - "ssm:ListAssociations"
+                  - "sts:GetCallerIdentity"
+                  - "tag:GetResources"
+                  - "tag:GetTagKeys"
+                  - "timestream:DescribeEndpoints"
+                  - "timestream:ListDatabases"
+                  - "transfer:ListServers"
+                  - "translate:ListTextTranslationJobs"
+                  - "waf-regional:ListWebACLs"
+                  - "waf:ListWebACLs"
+                  - "wafv2:GetLoggingConfiguration"
+                  - "wafv2:GetWebACL"
+                  - "wafv2:ListResourcesForWebACL"
+                  - "wafv2:ListWebACLs"
+                  - "workspaces:DescribeIpGroups"
+                  - "workspaces:DescribeTags"
+                  - "workspaces:DescribeWorkspaceDirectories"
+                  - "workspaces:DescribeWorkspaces"
+                  - "workspaces:DescribeWorkspacesConnectionStatus"
+                  - "xray:GetEncryptionConfig"
+                Resource: "*"
 
   StackSet:
     Type: AWS::CloudFormation::StackSet
@@ -136,6 +556,432 @@ Resources:
                 "ManagedPolicyArns": [
                   "arn:aws:iam::aws:policy/ReadOnlyAccess",
                   "arn:aws:iam::aws:policy/SecurityAudit"
+                ],
+                "Policies": [
+                          {
+        "PolicyName": "scan-permission-1",
+          "PolicyDocument":
+            "Version": "2012-10-17",
+            "Statement":
+                "Sid": "scanPolicy1",
+                "Effect": "Allow",
+                "Action": [
+                  "access-analyzer:GetAnalyzer",
+                  "access-analyzer:GetFinding",
+                  "access-analyzer:ListAnalyzers",
+                  "access-analyzer:ListFindings",
+                  "acm-pca:DescribeCertificateAuthority",
+                  "acm-pca:ListCertificateAuthorities",
+                  "acm-pca:ListTags",
+                  "acm:DescribeCertificate",
+                  "acm:GetCertificate",
+                  "acm:ListCertificates",
+                  "acm:ListTagsForCertificate",
+                  "airflow:GetEnvironment",
+                  "airflow:ListEnvironments",
+                  "amplify:GetApp",
+                  "amplify:ListApps",
+                  "aoss:GetSecurityPolicy",
+                  "aoss:ListCollections",
+                  "aoss:ListSecurityPolicies",
+                  "apigateway:GET",
+                  "appconfig:ListApplications",
+                  "appconfig:ListConfigurationProfiles",
+                  "appflow:ListFlows",
+                  "appmesh:DescribeMesh",
+                  "appmesh:DescribeVirtualGateway",
+                  "appmesh:ListMeshes",
+                  "appmesh:ListVirtualGateways",
+                  "apprunner:ListServices",
+                  "athena:GetWorkGroup",
+                  "athena:ListWorkGroups",
+                  "auditmanager:GetAssessment",
+                  "auditmanager:GetAssessmentFramework",
+                  "auditmanager:GetEvidence",
+                  "auditmanager:GetEvidenceByEvidenceFolder",
+                  "auditmanager:GetEvidenceFolder",
+                  "auditmanager:GetEvidenceFoldersByAssessment",
+                  "auditmanager:GetSettings",
+                  "auditmanager:ListAssessmentFrameworks",
+                  "auditmanager:ListAssessments",
+                  "autoscaling:DescribeAutoScalingGroups",
+                  "autoscaling:DescribeLaunchConfigurations",
+                  "autoscaling:DescribeNotificationConfigurations",
+                  "backup:DescribeBackupJob",
+                  "backup:DescribeBackupVault",
+                  "backup:DescribeRecoveryPoint",
+                  "backup:DescribeRegionSettings",
+                  "backup:GetBackupPlan",
+                  "backup:GetBackupSelection",
+                  "backup:GetBackupVaultAccessPolicy",
+                  "backup:GetBackupVaultNotifications",
+                  "backup:ListBackupJobs",
+                  "backup:ListBackupPlans",
+                  "backup:ListBackupSelections",
+                  "backup:ListBackupVaults",
+                  "backup:ListRecoveryPointsByBackupVault",
+                  "backup:ListTags",
+                  "bedrock:GetCustomModel",
+                  "bedrock:GetModelCustomizationJob",
+                  "bedrock:GetModelInvocationLoggingConfiguration",
+                  "bedrock:ListCustomModels",
+                  "bedrock:ListModelCustomizationJobs",
+                  "cloudformation:DescribeStackEvents",
+                  "cloudformation:DescribeStackResource",
+                  "cloudformation:DescribeStackResources",
+                  "cloudformation:DescribeStackSet",
+                  "cloudformation:DescribeStacks",
+                  "cloudformation:GetTemplate",
+                  "cloudformation:ListStackResources",
+                  "cloudformation:ListStackSets",
+                  "cloudformation:ListStacks",
+                  "cloudfront:DescribeFunction",
+                  "cloudfront:GetCachePolicy",
+                  "cloudfront:GetDistribution",
+                  "cloudfront:GetDistributionConfig",
+                  "cloudfront:GetFunction",
+                  "cloudfront:ListCachePolicies",
+                  "cloudfront:ListDistributions",
+                  "cloudfront:ListFunctions",
+                  "cloudfront:ListTagsForResource",
+                  "cloudtrail:DescribeTrails",
+                  "cloudtrail:GetChannel",
+                  "cloudtrail:GetEventSelectors",
+                  "cloudtrail:GetInsightSelectors",
+                  "cloudtrail:GetTrailStatus",
+                  "cloudtrail:ListChannels",
+                  "cloudtrail:ListTags",
+                  "cloudwatch:DescribeAlarms",
+                  "cloudwatch:GetMetricStatistics",
+                  "cloudwatch:ListTagsForResource",
+                  "codeartifact:DescribeDomain",
+                  "codeartifact:DescribeRepository",
+                  "codeartifact:GetDomainPermissionsPolicy",
+                  "codeartifact:GetRepositoryEndpoint",
+                  "codeartifact:GetRepositoryPermissionsPolicy",
+                  "codeartifact:ListDomains",
+                  "codeartifact:ListRepositories",
+                  "codeartifact:ListTagsForResource",
+                  "codebuild:BatchGetProjects",
+                  "codebuild:ListProjects",
+                  "codedeploy:GetDeploymentConfig",
+                  "codedeploy:ListDeploymentConfigs",
+                  "codepipeline:GetPipeline",
+                  "codepipeline:ListPipelines",
+                  "codepipeline:ListTagsForResource",
+                  "cognito-identity:DescribeIdentityPool",
+                  "cognito-identity:ListIdentityPools",
+                  "cognito-idp:DescribeUserPool",
+                  "cognito-idp:ListUserPools",
+                  "comprehend:ListFlywheels",
+                  "comprehend:ListSentimentDetectionJobs",
+                  "compute-optimizer:GetRecommendationSummaries",
+                  "config:DescribeConfigRules",
+                  "config:DescribeConfigurationRecorderStatus",
+                  "config:DescribeConfigurationRecorders",
+                  "config:DescribeDeliveryChannels",
+                  "config:GetComplianceDetailsByConfigRule",
+                  "config:GetDiscoveredResourceCounts",
+                  "connect:DescribeInstanceStorageConfig",
+                  "connect:ListInstanceStorageConfigs",
+                  "connect:ListInstances",
+                  "databrew:ListJobs",
+                  "dax:DescribeClusters",
+                  "dax:DescribeSubnetGroups",
+                  "dax:ListTags",
+                  "devops-guru:ListNotificationChannels",
+                  "dlm:GetLifecyclePolicies",
+                  "dlm:GetLifecyclePolicy",
+                  "dms:DescribeReplicationInstances",
+                  "docdb-elastic:GetCluster",
+                  "docdb-elastic:ListClusters",
+                  "docdb-elastic:ListTagsForResource",
+                  "dynamodb:DescribeBackup",
+                  "dynamodb:DescribeContinuousBackups",
+                  "dynamodb:DescribeKinesisStreamingDestination",
+                  "dynamodb:DescribeTable",
+                  "dynamodb:ListBackups",
+                  "dynamodb:ListTables",
+                  "dynamodb:ListTagsOfResource",
+                  "ec2:DescribeAccountAttributes",
+                  "ec2:DescribeAddresses",
+                  "ec2:DescribeEgressOnlyInternetGateways",
+                  "ec2:DescribeFlowLogs",
+                  "ec2:DescribeImages",
+                  "ec2:DescribeInstanceAttribute",
+                  "ec2:DescribeInstanceCreditSpecifications",
+                  "ec2:DescribeInstanceStatus",
+                  "ec2:DescribeInstanceTypeOfferings",
+                  "ec2:DescribeInstances",
+                  "ec2:DescribeInternetGateways",
+                  "ec2:DescribeKeyPairs",
+                  "ec2:DescribeLaunchTemplateVersions",
+                  "ec2:DescribeLaunchTemplates",
+                  "ec2:DescribeManagedPrefixLists",
+                  "ec2:DescribeNatGateways",
+                  "ec2:DescribeNetworkAcls",
+                  "ec2:DescribeNetworkInterfaces",
+                  "ec2:DescribeRegions",
+                  "ec2:DescribeReservedInstances",
+                  "ec2:DescribeReservedInstancesModifications",
+                  "ec2:DescribeRouteTables",
+                  "ec2:DescribeSecurityGroupRules",
+                  "ec2:DescribeSecurityGroups",
+                  "ec2:DescribeSnapshotAttribute",
+                  "ec2:DescribeSnapshots",
+                  "ec2:DescribeSubnets",
+                  "ec2:DescribeVolumeAttribute",
+                  "ec2:DescribeVolumes",
+                  "ec2:DescribeVpcEndpointServicePermissions",
+                  "ec2:DescribeVpcEndpointServices",
+                  "ec2:DescribeVpcEndpoints",
+                  "ec2:DescribeVpcPeeringConnections",
+                  "ec2:DescribeVpcs",
+                  "ec2:DescribeVpnConnections",
+                  "ec2:DescribeVpnGateways",
+                  "ec2:GetEbsDefaultKmsKeyId",
+                  "ec2:GetEbsEncryptionByDefault",
+                  "ec2:GetLaunchTemplateData",
+                  "ecr:DescribeRepositories",
+                  "ecr:GetRepositoryPolicy",
+                  "ecs:DescribeClusters",
+                  "ecs:DescribeServices",
+                  "ecs:ListClusters",
+                  "ecs:ListServices",
+                  "ecs:ListTagsForResource",
+                  "eks:DescribeCluster",
+                  "eks:ListClusters",
+                  "elasticache:DescribeCacheClusters",
+                  "elasticache:DescribeCacheSubnetGroups",
+                  "elasticache:DescribeReplicationGroups",
+                  "elasticache:DescribeReservedCacheNodes",
+                  "elasticache:ListTagsForResource",
+                  "elasticfilesystem:DescribeFileSystems",
+                  "elasticloadbalancing:DescribeInstanceHealth",
+                  "elasticloadbalancing:DescribeListeners",
+                  "elasticloadbalancing:DescribeLoadBalancerAttributes",
+                  "elasticloadbalancing:DescribeLoadBalancerPolicies",
+                  "elasticloadbalancing:DescribeLoadBalancers",
+                  "elasticloadbalancing:DescribeTags",
+                  "elasticloadbalancing:DescribeTargetGroupAttributes",
+                  "elasticloadbalancing:DescribeTargetGroups",
+                  "elasticloadbalancing:DescribeTargetHealth",
+                  "elasticmapreduce:DescribeCluster",
+                  "elasticmapreduce:DescribeSecurityConfiguration",
+                  "elasticmapreduce:ListClusters",
+                  "elasticmapreduce:ListInstanceGroups",
+                  "es:ListDomainNames",
+                  "events:ListEventBuses",
+                  "events:ListRules",
+                  "finspace:ListEnvironments",
+                  "firehose:DescribeDeliveryStream",
+                  "firehose:ListDeliveryStreams",
+                  "forecast:ListDatasets",
+                  "forecast:ListForecastExportJobs",
+                  "frauddetector:GetDetectors",
+                  "fsx:DescribeFileSystems",
+                  "glacier:ListVaults",
+                  "glue:GetDataCatalogEncryptionSettings",
+                  "glue:GetSecurityConfigurations",
+                  "guardduty:DescribePublishingDestination",
+                  "guardduty:GetDetector",
+                  "guardduty:GetFindings",
+                  "guardduty:GetMasterAccount",
+                ],
+                "Resource": "*"
+        },
+        {
+          "PolicyName": "scan-permission-2",
+          "PolicyDocument":
+            "Version": "2012-10-17",
+            "Statement":
+              "Sid": "scanPolicy2",
+                "Effect": "Allow",
+                "Action":[
+                  "guardduty:ListDetectors",
+                  "guardduty:ListFindings",
+                  "guardduty:ListPublishingDestinations",
+                  "healthlake:ListFHIRDatastores",
+                  "iam:GenerateCredentialReport",
+                  "iam:GetAccountPasswordPolicy",
+                  "iam:GetAccountSummary",
+                  "iam:GetCredentialReport",
+                  "iam:GetGroup",
+                  "iam:GetGroupPolicy",
+                  "iam:GetLoginProfile",
+                  "iam:GetPolicy",
+                  "iam:GetPolicyVersion",
+                  "iam:GetRole",
+                  "iam:GetRolePolicy",
+                  "iam:GetUser",
+                  "iam:GetUserPolicy",
+                  "iam:ListAccountAliases",
+                  "iam:ListAttachedGroupPolicies",
+                  "iam:ListAttachedRolePolicies",
+                  "iam:ListAttachedUserPolicies",
+                  "iam:ListEntitiesForPolicy",
+                  "iam:ListGroupPolicies",
+                  "iam:ListGroups",
+                  "iam:ListGroupsForUser",
+                  "iam:ListInstanceProfilesForRole",
+                  "iam:ListMFADevices",
+                  "iam:ListPolicies",
+                  "iam:ListRolePolicies",
+                  "iam:ListRoles",
+                  "iam:ListSSHPublicKeys",
+                  "iam:ListServerCertificates",
+                  "iam:ListUserPolicies",
+                  "iam:ListUsers",
+                  "iam:ListVirtualMFADevices",
+                  "imagebuilder:ListComponents",
+                  "imagebuilder:ListContainerRecipes",
+                  "imagebuilder:ListImagePipelines",
+                  "imagebuilder:ListImageRecipes",
+                  "imagebuilder:ListInfrastructureConfigurations",
+                  "iotsitewise:DescribeDefaultEncryptionConfiguration",
+                  "kafka:ListClusters",
+                  "kendra:ListIndices",
+                  "kinesis:DescribeStream",
+                  "kinesis:ListStreams",
+                  "kinesisvideo:ListStreams",
+                  "kms:DescribeKey",
+                  "kms:GetKeyPolicy",
+                  "kms:GetKeyRotationStatus",
+                  "kms:ListAliases",
+                  "kms:ListGrants",
+                  "kms:ListKeys",
+                  "kms:ListResourceTags",
+                  "lambda:GetFunction",
+                  "lambda:GetFunctionCodeSigningConfig",
+                  "lambda:GetFunctionConfiguration",
+                  "lambda:GetFunctionUrlConfig",
+                  "lambda:GetPolicy",
+                  "lambda:ListFunctions",
+                  "lex:ListBots",
+                  "logs:DescribeLogGroups",
+                  "logs:DescribeMetricFilters",
+                  "logs:GetDataProtectionPolicy",
+                  "logs:ListTagsForResource",
+                  "lookoutequipment:ListDatasets",
+                  "managedblockchain:GetMember",
+                  "managedblockchain:ListMembers",
+                  "managedblockchain:ListNetworks",
+                  "memorydb:DescribeClusters",
+                  "mq:DescribeBroker",
+                  "mq:ListBrokers",
+                  "organizations:DescribeOrganization",
+                  "organizations:ListAccounts",
+                  "organizations:ListHandshakesForAccount",
+                  "profile:ListDomains",
+                  "proton:ListEnvironmentTemplates",
+                  "rds:DescribeCertificates",
+                  "rds:DescribeDBClusterSnapshotAttributes",
+                  "rds:DescribeDBClusterSnapshots",
+                  "rds:DescribeDBClusters",
+                  "rds:DescribeDBEngineVersions",
+                  "rds:DescribeDBInstances",
+                  "rds:DescribeDBParameterGroups",
+                  "rds:DescribeDBParameters",
+                  "rds:DescribeDBProxies",
+                  "rds:DescribeDBSnapshotAttributes",
+                  "rds:DescribeDBSnapshots",
+                  "rds:DescribeDBSubnetGroups",
+                  "rds:DescribeOrderableDBInstanceOptions",
+                  "rds:DescribePendingMaintenanceActions",
+                  "rds:ListTagsForResource",
+                  "redshift-serverless:GetNamespace",
+                  "redshift-serverless:GetWorkgroup",
+                  "redshift-serverless:ListNamespaces",
+                  "redshift-serverless:ListTagsForResource",
+                  "redshift-serverless:ListWorkgroups",
+                  "redshift:DescribeClusterParameterGroups",
+                  "redshift:DescribeClusterParameters",
+                  "redshift:DescribeClusterSubnetGroups",
+                  "redshift:DescribeClusters",
+                  "redshift:DescribeLoggingStatus",
+                  "redshift:DescribeReservedNodes",
+                  "redshift:DescribeScheduledActions",
+                  "route53:GetDNSSEC",
+                  "route53:GetHostedZone",
+                  "route53:ListHostedZones",
+                  "route53:ListQueryLoggingConfigs",
+                  "route53:ListResourceRecordSets",
+                  "route53:ListTagsForResource",
+                  "route53domains:GetDomainDetail",
+                  "route53domains:ListDomains",
+                  "route53domains:ListTagsForDomain",
+                  "s3:GetAccelerateConfiguration",
+                  "s3:GetAccessPoint",
+                  "s3:GetAccessPointPolicy",
+                  "s3:GetAccessPointPolicyStatus",
+                  "s3:GetBucketAcl",
+                  "s3:GetBucketLocation",
+                  "s3:GetBucketLogging",
+                  "s3:GetBucketNotification",
+                  "s3:GetBucketObjectLockConfiguration",
+                  "s3:GetBucketOwnershipControls",
+                  "s3:GetBucketPolicy",
+                  "s3:GetBucketPolicyStatus",
+                  "s3:GetBucketPublicAccessBlock",
+                  "s3:GetBucketTagging",
+                  "s3:GetBucketVersioning",
+                  "s3:GetBucketWebsite",
+                  "s3:GetEncryptionConfiguration",
+                  "s3:GetLifecycleConfiguration",
+                  "s3:GetReplicationConfiguration",
+                  "s3:ListAccessPoints",
+                  "s3:ListAllMyBuckets",
+                  "s3:ListBucket",
+                  "sagemaker:DescribeDomain",
+                  "sagemaker:DescribeNotebookInstance",
+                  "sagemaker:ListDomains",
+                  "sagemaker:ListNotebookInstances",
+                  "sagemaker:ListTags",
+                  "secretsmanager:DescribeSecret",
+                  "secretsmanager:ListSecrets",
+                  "securityhub:DescribeHub",
+                  "securityhub:GetFindings",
+                  "servicequotas:ListServiceQuotas",
+                  "ses:DescribeActiveReceiptRuleSet",
+                  "ses:GetIdentityDkimAttributes",
+                  "ses:ListIdentities",
+                  "shield:DescribeEmergencyContactSettings",
+                  "shield:DescribeSubscription",
+                  "shield:ListProtections",
+                  "sns:GetSubscriptionAttributes",
+                  "sns:GetTopicAttributes",
+                  "sns:ListSubscriptions",
+                  "sns:ListTagsForResource",
+                  "sns:ListTopics",
+                  "sqs:GetQueueAttributes",
+                  "sqs:ListQueueTags",
+                  "sqs:ListQueues",
+                  "ssm:DescribeInstanceInformation",
+                  "ssm:DescribeParameters",
+                  "ssm:DescribeSessions",
+                  "ssm:GetServiceSetting",
+                  "ssm:ListAssociations",
+                  "sts:GetCallerIdentity",
+                  "tag:GetResources",
+                  "tag:GetTagKeys",
+                  "timestream:DescribeEndpoints",
+                  "timestream:ListDatabases",
+                  "transfer:ListServers",
+                  "translate:ListTextTranslationJobs",
+                  "waf-regional:ListWebACLs",
+                  "waf:ListWebACLs",
+                  "wafv2:GetLoggingConfiguration",
+                  "wafv2:GetWebACL",
+                  "wafv2:ListResourcesForWebACL",
+                  "wafv2:ListWebACLs",
+                  "workspaces:DescribeIpGroups",
+                  "workspaces:DescribeTags",
+                  "workspaces:DescribeWorkspaceDirectories",
+                  "workspaces:DescribeWorkspaces",
+                  "workspaces:DescribeWorkspacesConnectionStatus",
+                  "xray:GetEncryptionConfig",
+                ],
+                "Resource": "*"}
                 ]
               }
             }
