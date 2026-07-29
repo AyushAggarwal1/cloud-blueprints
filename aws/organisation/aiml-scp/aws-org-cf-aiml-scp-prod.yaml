@@ -237,24 +237,24 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: CreateScpSupportStack
     Properties:
-      TemplateURL: !Sub https://cloud-security-cnapp-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/dev-1d53230/aws-scp-support/aws-scp-support.yaml
+      TemplateURL: !Sub https://cloud-security-cnapp-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/prod-1d53230/aws-scp-support/aws-scp-support.yaml
       TimeoutInMinutes: 30
       Parameters:
         ProjectName: aws-scp-support
         ResourceNameSuffix: !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref "AWS::StackId"]]]]
-        ApiStageName: dev
+        ApiStageName: prod
         EnableJwtAuthorizer: "true"
         EnforcementLambdaS3Bucket: !Sub cloud-security-cnapp-${AWS::Region}
-        EnforcementLambdaS3Key: dev-1d53230/aws-scp-support/enforcement-lambda.zip
+        EnforcementLambdaS3Key: prod-1d53230/aws-scp-support/enforcement-lambda.zip
         AuthorizerLambdaS3Bucket: !Sub cloud-security-cnapp-${AWS::Region}
-        AuthorizerLambdaS3Key: dev-1d53230/aws-scp-support/authorizer-lambda.zip
+        AuthorizerLambdaS3Key: prod-1d53230/aws-scp-support/authorizer-lambda.zip
         ScpDetectorLambdaS3Bucket: !Sub cloud-security-cnapp-${AWS::Region}
-        ScpDetectorLambdaS3Key: dev-1d53230/aws-scp-support/scp-detector-lambda.zip
-        ScpAlertsWebhookUrl: https://cwpp.dev.accuknox.com/aws/alerts
+        ScpDetectorLambdaS3Key: prod-1d53230/aws-scp-support/scp-detector-lambda.zip
+        ScpAlertsWebhookUrl: https://cwpp.prod.accuknox.com/aws/alerts
         ScpAlertsTenantId: !Ref ScpAlertsTenantId
         ScpAlertAllowedPrincipalOrgId: !Ref ScpAwsOrganizationId
-        JwtJwksUrl: https://cspm.dev.accuknox.com/api/v1/jwks/
-        JwtExpectedIssuer: cspm.dev.accuknox.com
+        JwtJwksUrl: https://cspm.prod.accuknox.com/api/v1/jwks/
+        JwtExpectedIssuer: cspm.prod.accuknox.com
         CreateScpAlertCloudTrail: "true"
         ScpAlertCloudTrailLogRetentionDays: 1
         ScpComponentName: cloud-governance
