@@ -23,7 +23,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: arn:aws:iam::413297632188:user/cnapp-security-audit-ak
+              AWS: arn:aws:iam::183295447715:user/cnapp-security-audit-ak
             Action: sts:AssumeRole
             Condition:
               StringEquals:
@@ -47,6 +47,8 @@ Resources:
                   - sagemaker:InvokeEndpoint
                   - aws-marketplace:Subscribe
                   - aws-marketplace:ViewSubscriptions
+                  - bedrock-agentcore:InvokeAgentRuntime
+                  - bedrock-agentcore:StopRuntimeSession
                 Resource: "*"
 
 Outputs:

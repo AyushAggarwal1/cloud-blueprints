@@ -117,6 +117,8 @@ Resources:
                   - "sagemaker:InvokeEndpoint"
                   - "aws-marketplace:Subscribe"
                   - "aws-marketplace:ViewSubscriptions"
+                  - "bedrock-agentcore:InvokeAgentRuntime"
+                  - "bedrock-agentcore:StopRuntimeSession"
                 Resource: "*"
 
   StackSet:
@@ -216,7 +218,9 @@ Resources:
                             "bedrock:ListModelInvocationJobs",
                             "sagemaker:InvokeEndpoint",
                             "aws-marketplace:Subscribe",
-                            "aws-marketplace:ViewSubscriptions"
+                            "aws-marketplace:ViewSubscriptions",
+                            "bedrock-agentcore:InvokeAgentRuntime",
+                            "bedrock-agentcore:StopRuntimeSession"
                           ],
                           "Resource": "*"
                         }

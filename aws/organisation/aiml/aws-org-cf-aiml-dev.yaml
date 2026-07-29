@@ -41,7 +41,6 @@ Conditions:
   HasAccountIds: !Not [!Equals [!Join [",", !Ref AccountIds], ""]]
   UseInclude: !Equals [!Ref AccountFilterType, "INCLUDE"]
   UseExclude: !Equals [!Ref AccountFilterType, "EXCLUDE"]
-  AutoDeployEnabled: !Equals [!Ref AutoDeploy, "true"]
 
 Resources:
   ManagementAccountRole:
@@ -54,7 +53,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: arn:aws:iam::413297632188:user/cnapp-security-audit-ak
+              AWS: arn:aws:iam::956994857092:user/cnapp-security-audit-ak
             Action: "sts:AssumeRole"
             Condition:
               StringEquals:
@@ -76,6 +75,10 @@ Resources:
                   - "bedrock:ListImportedModels"
                   - "bedrock:ListModelInvocationJobs"
                   - "sagemaker:InvokeEndpoint"
+                  - "aws-marketplace:Subscribe"
+                  - "aws-marketplace:ViewSubscriptions"
+                  - "bedrock-agentcore:InvokeAgentRuntime"
+                  - "bedrock-agentcore:StopRuntimeSession"
                 Resource: "*"
 
   StackSet:
@@ -83,9 +86,7 @@ Resources:
     Properties:
       AutoDeployment:
         Enabled: !Ref AutoDeploy
-        # Only include RetainStacksOnAccountRemoval when AutoDeploy is true
-        RetainStacksOnAccountRemoval:
-          !If [AutoDeployEnabled, false, !Ref "AWS::NoValue"]
+        RetainStacksOnAccountRemoval: false
       PermissionModel: SERVICE_MANAGED
       Capabilities:
         - CAPABILITY_NAMED_IAM
@@ -133,7 +134,7 @@ Resources:
                     {
                       "Effect": "Allow",
                       "Principal": {
-                        "AWS": "arn:aws:iam::413297632188:user/cnapp-security-audit-ak"
+                        "AWS": "arn:aws:iam::956994857092:user/cnapp-security-audit-ak"
                       },
                       "Action": "sts:AssumeRole",
                       "Condition": {
@@ -163,7 +164,11 @@ Resources:
                             "bedrock:InvokeModel",
                             "bedrock:ListImportedModels",
                             "bedrock:ListModelInvocationJobs",
-                            "sagemaker:InvokeEndpoint"
+                            "sagemaker:InvokeEndpoint",
+                            "aws-marketplace:Subscribe",
+                            "aws-marketplace:ViewSubscriptions",
+                            "bedrock-agentcore:InvokeAgentRuntime",
+                            "bedrock-agentcore:StopRuntimeSession"
                           ],
                           "Resource": "*"
                         }
