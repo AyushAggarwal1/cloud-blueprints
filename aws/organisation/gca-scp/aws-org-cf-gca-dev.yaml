@@ -195,7 +195,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: CreateScpSupportStack
     Properties:
-      TemplateURL: !Sub https://cloud-security-cnapp-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/aws-scp-support/aws-scp-support.yaml
+      TemplateURL: !Sub https://cloud-security-cnapp-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/dev-1d53230/aws-scp-support/aws-scp-support.yaml
       TimeoutInMinutes: 30
       Parameters:
         ProjectName: aws-scp-support
@@ -203,11 +203,11 @@ Resources:
         ApiStageName: dev
         EnableJwtAuthorizer: "true"
         EnforcementLambdaS3Bucket: !Sub cloud-security-cnapp-${AWS::Region}
-        EnforcementLambdaS3Key: aws-scp-support/enforcement-lambda.zip
+        EnforcementLambdaS3Key: dev-1d53230/aws-scp-support/enforcement-lambda.zip
         AuthorizerLambdaS3Bucket: !Sub cloud-security-cnapp-${AWS::Region}
-        AuthorizerLambdaS3Key: aws-scp-support/authorizer-lambda.zip
+        AuthorizerLambdaS3Key: dev-1d53230/aws-scp-support/authorizer-lambda.zip
         ScpDetectorLambdaS3Bucket: !Sub cloud-security-cnapp-${AWS::Region}
-        ScpDetectorLambdaS3Key: aws-scp-support/scp-detector-lambda.zip
+        ScpDetectorLambdaS3Key: dev-1d53230/aws-scp-support/scp-detector-lambda.zip
         ScpAlertsWebhookUrl: https://cwpp.dev.accuknox.com/aws/alerts
         ScpAlertsTenantId: !Ref ScpAlertsTenantId
         ScpAlertAllowedPrincipalOrgId: !Ref ScpAwsOrganizationId
